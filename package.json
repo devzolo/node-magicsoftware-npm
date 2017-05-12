@@ -11,8 +11,7 @@
     "java": "^0.8.0"
   },
   "description": "Bridge API to connect with Magic Software APIs.",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "directories": {
     "test": "test"
   },
@@ -21,8 +20,8 @@
     "tarball": "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
   },
   "files": [
-	"lib/uniRequester.jar",
-	"lib/Magic.jar",
+    "lib/uniRequester.jar",
+    "lib/Magic.jar",
     "index.js"
   ],
   "gitHead": "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6",
@@ -49,5 +48,5 @@
   "scripts": {
     "test": "tap test/*.js"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }
