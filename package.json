@@ -21,13 +21,9 @@
   },
   "files": [
     "lib/uniRequester.jar",
-	
     "lib/Magic.jar",
-	
     "bin/MGrqgnrc.dll",
-	
     "bin/x64/MGrqgnrc.dll",
-	
     "index.js"
   ],
   "gitHead": "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6",
@@ -54,5 +50,5 @@
   "scripts": {
     "test": "tap test/*.js"
   },
-  "version": "0.0.7"
+  "version": "0.0.8"
 }
