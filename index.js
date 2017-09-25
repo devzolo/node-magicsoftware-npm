@@ -44,7 +44,21 @@ public static void addLibraryPath(String pathToAdd) throws Exception{
 }
 */
 
-setLibraryPath(__dirname);
+function isOSWin64() {
+  return process.arch === 'x64' || process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432');
+}
+
+function initLibraryPath() {
+	if(isOSWin64()) {
+		setLibraryPath(path.join(__dirname, "bin/x64"));
+	}
+	else {
+		setLibraryPath(path.join(__dirname, "bin"));
+	}
+}
+
+initLibraryPath();
+
 
 class Requester {
 	
