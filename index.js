@@ -11,6 +11,14 @@ var javaLangClassLoader = java.import('java.lang.ClassLoader');
 var MagicRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
 var MagicException = java.import('br.com.vitalbyte.magic.exceptions.MagicException');
 var MagicVariable = java.import('br.com.vitalbyte.magic.types.MagicVariable');
+var MagicAlpha = java.import('br.com.vitalbyte.magic.types.MagicAlpha');
+var MagicNumeric = java.import('br.com.vitalbyte.magic.types.MagicNumeric');
+var MagicLogical = java.import('br.com.vitalbyte.magic.types.MagicLogical');
+var MagicDate = java.import('br.com.vitalbyte.magic.types.MagicDate');
+var MagicTime = java.import('br.com.vitalbyte.magic.types.MagicTime');
+var MagicBlob = java.import('br.com.vitalbyte.magic.types.MagicBlob');
+var MagicVariant = java.import('br.com.vitalbyte.magic.types.MagicVariant');
+
 var databases = {}
 
 
@@ -92,8 +100,15 @@ class Requester {
 }
 	
 module.exports.Requester = Requester;
-
-
+module.exports.MagicException = MagicException;
+module.exports.MagicVariable = MagicVariable;
+module.exports.MagicAlpha = MagicAlpha;
+module.exports.MagicNumeric = MagicNumeric;
+module.exports.MagicLogical = MagicLogical;
+module.exports.MagicDate = MagicDate;
+module.exports.MagicTime = MagicTime;
+module.exports.MagicBlob = MagicBlob;
+module.exports.MagicVariant = MagicVariant;
 
 	
 	
