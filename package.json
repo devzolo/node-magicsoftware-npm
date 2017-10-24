@@ -26,13 +26,20 @@
     "bin/MGrqgnrc.dll",
     "bin/x64/MGrqgnrc.dll",
     "index.ts",
-    "index.js"
+    "index.js",
+    "requester.ts",
+    "requester.js",
+    "ini.ts",
+    "ini.js",
+    "database.ts",
+    "database.js"
   ],
   "gitHead": "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6",
   "homepage": "https://github.com/raphael-interinfo/node-magicsoftware#readme",
   "keywords": [
     "magicsoftware",
-    "java"
+    "java",
+    "ini"
   ],
   "license": "ISC",
   "main": "index.js",

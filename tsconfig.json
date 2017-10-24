@@ -2,14 +2,14 @@
 	"compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-		"sourceMap": true,
+		"sourceMap": false,
 		"watch": true,
         "isolatedModules": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "declaration": false,
         "noImplicitAny": false,
-        "removeComments": true,
+        "removeComments": false,
         "noLib": false,
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true	
