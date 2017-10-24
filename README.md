@@ -4,8 +4,28 @@
 npm install magicsoftware
 ```
 
-## Quick Examples
+## Javascript Requester Example
 
+```javascript
+
+var magic = require("magicsoftware/requester");
+
+var requester = new magic.MagicRequester("Teste", "localhost/5115");
+var v_example = new magic.MagicAlpha("TESTE");
+ 
+requester.callByName("TEST", [v_example], function(err, result) {
+    if(err) {
+        console.log(err);   
+    }
+    else {
+        console.log("v_example = " + v_example);
+        console.log("result =  " + result);
+    }
+	
+```
+	
+## TypeScript Requester Example
+	
 ```javascript
 
 import {
@@ -19,10 +39,10 @@ import {
     MagicTime,
     MagicBlob,
     MagicVariant
-} from "magicsoftware/requester"
+} from "magicsoftware/requester";
 
-var requester = new MagicRequester("Teste", "localhost/5115");
-var v_example = new MagicAlpha("TESTE");
+var requester:MagicRequester = new MagicRequester("Teste", "localhost/5115");
+var v_example:MagicAlpha = new MagicAlpha("TESTE");
 
 requester.callByName("TEST", [v_example], function(err, result) {
     if(err) {
