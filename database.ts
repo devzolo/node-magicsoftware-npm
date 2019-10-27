@@ -1,4 +1,4 @@
-import {MagicIni} from "ini"
+import {MagicIni} from "./ini"
 
 export class MagicDatabaseInfo {
     private raw: Array<string>;
