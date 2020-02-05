@@ -1,33 +1,34 @@
 "use strict";
 /*/// <reference path="./node_modules/@types/node/index.d.ts" />*/
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var java = require('java');
-var path = require('path');
-//java.library.path = __dirname;
-java.classpath.push(path.resolve(__dirname, '..', 'lib/uniRequester.jar'));
-java.classpath.push(path.resolve(__dirname, '..', 'lib/Magic.jar'));
-let javaLangSystem = java.import('java.lang.System');
-let javaLangClassLoader = java.import('java.lang.ClassLoader');
-let MGRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
-exports.MagicException = java.import('br.com.vitalbyte.magic.exceptions.MagicException');
-exports.MagicVariable = java.import('br.com.vitalbyte.magic.types.MagicVariable');
-exports.MagicAlpha = java.import('br.com.vitalbyte.magic.types.MagicAlpha');
-exports.MagicNumeric = java.import('br.com.vitalbyte.magic.types.MagicNumeric');
-exports.MagicLogical = java.import('br.com.vitalbyte.magic.types.MagicLogical');
-exports.MagicDate = java.import('br.com.vitalbyte.magic.types.MagicDate');
-exports.MagicTime = java.import('br.com.vitalbyte.magic.types.MagicTime');
-exports.MagicBlob = java.import('br.com.vitalbyte.magic.types.MagicBlob');
-exports.MagicVariant = java.import('br.com.vitalbyte.magic.types.MagicVariant');
-var databases = {};
+const java_1 = __importDefault(require("java"));
+const path_1 = __importDefault(require("path"));
+java_1.default.classpath.push(path_1.default.resolve(__dirname, '..', 'lib/uniRequester.jar'));
+java_1.default.classpath.push(path_1.default.resolve(__dirname, '..', 'lib/Magic.jar'));
+const javaLangSystem = java_1.default.import('java.lang.System');
+const javaLangClassLoader = java_1.default.import('java.lang.ClassLoader');
+const MGRequester = java_1.default.import('br.com.vitalbyte.magic.MagicRequester');
+exports.MagicException = java_1.default.import('br.com.vitalbyte.magic.exceptions.MagicException');
+exports.MagicVariable = java_1.default.import('br.com.vitalbyte.magic.types.MagicVariable');
+exports.MagicAlpha = java_1.default.import('br.com.vitalbyte.magic.types.MagicAlpha');
+exports.MagicNumeric = java_1.default.import('br.com.vitalbyte.magic.types.MagicNumeric');
+exports.MagicLogical = java_1.default.import('br.com.vitalbyte.magic.types.MagicLogical');
+exports.MagicDate = java_1.default.import('br.com.vitalbyte.magic.types.MagicDate');
+exports.MagicTime = java_1.default.import('br.com.vitalbyte.magic.types.MagicTime');
+exports.MagicBlob = java_1.default.import('br.com.vitalbyte.magic.types.MagicBlob');
+exports.MagicVariant = java_1.default.import('br.com.vitalbyte.magic.types.MagicVariant');
 function setLibraryPath(path) {
     javaLangSystem.setPropertySync("java.library.path", path);
     //set sys_paths to null
-    var sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
+    const sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
     sysPathsField.setAccessibleSync(true);
     sysPathsField.setSync(null, null);
 }
 function initLibraryPath() {
-    setLibraryPath(path.join(__dirname, '..', 'bin', process.platform, process.arch));
+    setLibraryPath(path_1.default.join(__dirname, '..', 'bin', process.platform, process.arch));
 }
 initLibraryPath();
 class MagicRequester {
@@ -47,12 +48,11 @@ class MagicRequester {
      * @returns The actual values represented by logical names and nested logical names.
      */
     callByName(publicName, params, callback) {
-        var self = this;
         var args = params;
         args.unshift(publicName);
         try {
             var prog = args.shift();
-            var result = MGRequester.staticCallByNameSync(self.impl, prog, java.newArray("br.com.vitalbyte.magic.types.MagicVariable", args));
+            var result = MGRequester.staticCallByNameSync(this.impl, prog, java_1.default.newArray("br.com.vitalbyte.magic.types.MagicVariable", args));
             callback(null, result);
         }
         catch (e) {

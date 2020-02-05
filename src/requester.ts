@@ -1,35 +1,29 @@
 /*/// <reference path="./node_modules/@types/node/index.d.ts" />*/
 
-var java = require('java');
-var path = require('path');
-
-
-//java.library.path = __dirname;
+import java from 'java';
+import path from 'path';
 
 java.classpath.push(path.resolve(__dirname, '..', 'lib/uniRequester.jar'));
 java.classpath.push(path.resolve(__dirname, '..', 'lib/Magic.jar'));
 
-let javaLangSystem = java.import('java.lang.System');
-let javaLangClassLoader = java.import('java.lang.ClassLoader');
-let MGRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
-export var MagicException = java.import('br.com.vitalbyte.magic.exceptions.MagicException');
-export var MagicVariable = java.import('br.com.vitalbyte.magic.types.MagicVariable');
-export var MagicAlpha = java.import('br.com.vitalbyte.magic.types.MagicAlpha');
-export var MagicNumeric = java.import('br.com.vitalbyte.magic.types.MagicNumeric');
-export var MagicLogical = java.import('br.com.vitalbyte.magic.types.MagicLogical');
-export var MagicDate = java.import('br.com.vitalbyte.magic.types.MagicDate');
-export var MagicTime = java.import('br.com.vitalbyte.magic.types.MagicTime');
-export var MagicBlob = java.import('br.com.vitalbyte.magic.types.MagicBlob');
-export var MagicVariant = java.import('br.com.vitalbyte.magic.types.MagicVariant');
+const javaLangSystem = java.import('java.lang.System');
+const javaLangClassLoader = java.import('java.lang.ClassLoader');
+const MGRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
+export const MagicException = java.import('br.com.vitalbyte.magic.exceptions.MagicException');
+export const MagicVariable = java.import('br.com.vitalbyte.magic.types.MagicVariable');
+export const MagicAlpha = java.import('br.com.vitalbyte.magic.types.MagicAlpha');
+export const MagicNumeric = java.import('br.com.vitalbyte.magic.types.MagicNumeric');
+export const MagicLogical = java.import('br.com.vitalbyte.magic.types.MagicLogical');
+export const MagicDate = java.import('br.com.vitalbyte.magic.types.MagicDate');
+export const MagicTime = java.import('br.com.vitalbyte.magic.types.MagicTime');
+export const MagicBlob = java.import('br.com.vitalbyte.magic.types.MagicBlob');
+export const MagicVariant = java.import('br.com.vitalbyte.magic.types.MagicVariant');
 
-var databases = {}
-
-
-function setLibraryPath(path) {
+function setLibraryPath(path: string) {
     javaLangSystem.setPropertySync("java.library.path", path);
 
     //set sys_paths to null
-    var sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
+    const sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
     sysPathsField.setAccessibleSync(true);
     sysPathsField.setSync(null, null);
 }
@@ -60,15 +54,13 @@ export class MagicRequester {
 	 * @returns The actual values represented by logical names and nested logical names.
 	 */
 	callByName(publicName: string, params: Array<any>, callback: (err:any, result?:any) => any) {
-		var self = this;
-
 		var args = params;
 
 		args.unshift(publicName);
 
 		try {
 			var prog = args.shift();
-			var result = MGRequester.staticCallByNameSync(self.impl, prog,  java.newArray("br.com.vitalbyte.magic.types.MagicVariable", args));
+			var result = MGRequester.staticCallByNameSync(this.impl, prog,  java.newArray("br.com.vitalbyte.magic.types.MagicVariable", args));
 
 			callback(null, result);
 

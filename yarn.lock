@@ -2,7 +2,14 @@
 # yarn lockfile v1
 
 
-"@types/node@^13.7.0":
+"@types/java@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@types/java/-/java-0.9.0.tgz#c84e3b57c431765a18fa7555a51bafe896d5ad2b"
+  integrity sha512-Ux1QiXvPf65jC6INLwjrOChtCagzZBVHZoXwkCWlh22Dp8tH0eIE3lTDeBagTRZoHh97lrYMxuQpCdCqrHy66A==
+  dependencies:
+    "@types/node" "*"
+
+"@types/node@*", "@types/node@^13.7.0":
   version "13.7.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.7.0.tgz#b417deda18cf8400f278733499ad5547ed1abec4"
   integrity sha512-GnZbirvmqZUzMgkFn70c74OQpTTUcCzlhQliTzYjQMqg+hVKcDnxdL19Ne3UdYzdMA/+W3eb646FWn/ZaT1NfQ==
