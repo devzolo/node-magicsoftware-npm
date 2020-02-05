@@ -2,9 +2,9 @@ var fs = require('fs');
 
 let eol = process.platform === "win32" ? "\r\n" : "\n"
 function encode (obj, opt) {
-	var children = []
+	var children:string[] = []
 	  , out = ""
-  
+
 	if (typeof opt === "string") {
 	  opt = {
 		section: opt,
@@ -14,9 +14,9 @@ function encode (obj, opt) {
 	  opt = opt || {}
 	  opt.whitespace = opt.whitespace === true
 	}
-  
+
 	var separator = opt.whitespace ? " = " : "="
-  
+
 	Object.keys(obj).forEach(function (k, _, __) {
 	  var val = obj[k]
 	  if (val && Array.isArray(val)) {
@@ -30,11 +30,11 @@ function encode (obj, opt) {
 		out += safe(k) + separator + safe(val) + eol
 	  }
 	})
-  
+
 	if (opt.section && out.length) {
 	  out = "[" + safe(opt.section) + "]" + eol + out
 	}
-  
+
 	children.forEach(function (k, _, __) {
 	  var nk = dotSplit(k).join('\\.')
 	  var section = (opt.section ? opt.section + "." : "") + nk
@@ -47,10 +47,10 @@ function encode (obj, opt) {
 	  }
 	  out += child
 	})
-  
+
 	return out
   }
-  
+
   function dotSplit (str) {
 	return str.replace(/\1/g, '\u0002LITERAL\\1LITERAL\u0002')
 		   .replace(/\\\./g, '\u0001')
@@ -59,7 +59,7 @@ function encode (obj, opt) {
 					.replace(/\2LITERAL\\1LITERAL\2/g, '\u0001')
 		  })
   }
-  
+
   function decode (str) {
 	var out:any = {}
 	  , p = out
@@ -69,13 +69,13 @@ function encode (obj, opt) {
 	  , re = /^\[([^\]]*)\]$|^([^=]+)(=(.*))?$/i
 	  , lines = str.split(/[\r\n]+/g)
 	  , section = null
-  
+
 	  /******************************************************************/
-   
+
 	  lines.forEach(function(line, index, object){
 		  if(line!=null && line.trim().charAt(line.trim().length-1) === '+'){
 			lines[index] = line.slice(0,-1);
-			for(let counter=1;;counter++) { 
+			for(let counter=1;;counter++) {
 			  if(lines[index+counter]!=null && lines[index+counter].trim().charAt(lines[index+counter].trim().length-1) === '+') {
 				lines[index] = String(lines[index]) + lines[index+counter].slice(0,-1);
 				lines[index+counter] = "";
@@ -87,15 +87,15 @@ function encode (obj, opt) {
 			  }
 			}
 		  }
-	  });   
+	  });
 	  /******************************************************************/
-  
+
 	lines.forEach(function (line, _, __) {
 	  if (!line || line.match(/^\s*[;#]/)) return
 	  var match = line.match(re)
 	  if (!match) return
 	  if (match[1] !== undefined) {
-		section = unsafe(match[1])
+		const section = unsafe(match[1])
 		p = out[section] = out[section] || {}
 		return
 	  }
@@ -106,7 +106,7 @@ function encode (obj, opt) {
 		case 'false':
 		case 'null': value = JSON.parse(value)
 	  }
-  
+
 	  // Convert keys with '[]' suffix to an array
 	  if (key.length > 2 && key.slice(-2) === "[]") {
 		  key = key.substring(0, key.length - 2)
@@ -117,7 +117,7 @@ function encode (obj, opt) {
 			p[key] = [p[key]]
 		  }
 	  }
-  
+
 	  // safeguard against resetting a previously defined
 	  // array by accidentally forgetting the brackets
 	  if (Array.isArray(p[key])) {
@@ -127,7 +127,7 @@ function encode (obj, opt) {
 		p[key] = value
 	  }
 	})
-  
+
 	// {a:{y:1},"a.b":{x:2}} --> {a:{y:1,b:{x:2}}}
 	// use a filter to return the keys that have to be deleted.
 	Object.keys(out).filter(function (k, _, __) {
@@ -148,7 +148,7 @@ function encode (obj, opt) {
 	}).forEach(function (del, _, __) {
 	  delete out[del]
 	})
-  
+
 	out.translate = function(source) {
 		  var pat = /%.+?%/g;
 	  var mat = pat.exec(source);
@@ -157,28 +157,28 @@ function encode (obj, opt) {
 		  {
 			  var logical = mat[0];
 			  var logicalName = logical.substring(1, mat[0].length-1);
-			  var logicalValue = null;  	
+			  var logicalValue = null;
 			  if(logicalValue == null)
 			  {
-				  logicalValue = out.MAGIC_LOGICAL_NAMES[logicalName];   
+				  logicalValue = out.MAGIC_LOGICAL_NAMES[logicalName];
 			  }
 			  if(logicalValue != null) {
 				  logicalValue = out.translate(logicalValue);
 				  result = result.replace(logical, logicalValue);
 		}
 		mat = pat.exec(source);
-		  }	  
+		  }
 		  return result;
-	}  
-	
+	}
+
 	return out
   }
-  
+
   function isQuoted (val) {
 	return (val.charAt(0) === "\"" && val.slice(-1) === "\"")
 		   || (val.charAt(0) === "'" && val.slice(-1) === "'")
   }
-  
+
   function safe (val) {
 	return ( typeof val !== "string"
 		   || val.match(/[=\r\n]/)
@@ -189,7 +189,7 @@ function encode (obj, opt) {
 		   ? JSON.stringify(val)
 		   : val.replace(/;/g, '\\;').replace(/#/g, "\\#")
   }
-  
+
   function unsafe (val, doUnesc?) {
 	val = (val || "").trim()
 	if (isQuoted(val)) {
@@ -245,19 +245,19 @@ interface MagicIniData {
 		MAGIC_SPECIALS: any;
 		MAGIC_SYSTEMS: any;
 		translate(str: string): string;
-}  
+}
 
 export class MagicIni {
-	
+
 	public ini: MagicIniData;
 
 	constructor(public iniFilePath: string) {
 		this.ini = decode(fs.readFileSync(iniFilePath, 'latin1'));
 	}
-	
+
 	/**
 	 * Translates all logical names, including nested logical names, in a string to their actual values.
-	 * If a logical name is not found, it will be removed from the returned string. Secret names are not translated. 
+	 * If a logical name is not found, it will be removed from the returned string. Secret names are not translated.
 	 * @method translate
 	 * @param str str – An alpha value with logical names.
 	 * @returns The actual values represented by logical names and nested logical names.

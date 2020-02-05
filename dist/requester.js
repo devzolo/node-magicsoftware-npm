@@ -6,9 +6,9 @@ var path = require('path');
 //java.library.path = __dirname;
 java.classpath.push(path.resolve(__dirname, './lib/uniRequester.jar'));
 java.classpath.push(path.resolve(__dirname, './lib/Magic.jar'));
-var javaLangSystem = java.import('java.lang.System');
-var javaLangClassLoader = java.import('java.lang.ClassLoader');
-var MGRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
+let javaLangSystem = java.import('java.lang.System');
+let javaLangClassLoader = java.import('java.lang.ClassLoader');
+let MGRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
 exports.MagicException = java.import('br.com.vitalbyte.magic.exceptions.MagicException');
 exports.MagicVariable = java.import('br.com.vitalbyte.magic.types.MagicVariable');
 exports.MagicAlpha = java.import('br.com.vitalbyte.magic.types.MagicAlpha');
@@ -27,19 +27,14 @@ function setLibraryPath(path) {
     sysPathsField.setSync(null, null);
 }
 function isOSWin64() {
-    return process.arch === 'x64' || process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432');
+    return process.arch === 'x64' || (process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432') && process.env.PROCESSOR_ARCHITEW6432 == 'AMD64');
 }
 function initLibraryPath() {
-    if (isOSWin64()) {
-        setLibraryPath(path.join(__dirname, "bin/x64"));
-    }
-    else {
-        setLibraryPath(path.join(__dirname, "bin"));
-    }
+    setLibraryPath(path.join(__dirname, '..', 'bin', process.platform, process.arch));
 }
 initLibraryPath();
-var MagicRequester = /** @class */ (function () {
-    function MagicRequester(app, server) {
+class MagicRequester {
+    constructor(app, server) {
         this.app = app;
         this.server = server;
         this.app = app;
@@ -54,7 +49,7 @@ var MagicRequester = /** @class */ (function () {
      * @param callback callback – Result callback.
      * @returns The actual values represented by logical names and nested logical names.
      */
-    MagicRequester.prototype.callByName = function (publicName, params, callback) {
+    callByName(publicName, params, callback) {
         var self = this;
         var args = params;
         args.unshift(publicName);
@@ -67,28 +62,28 @@ var MagicRequester = /** @class */ (function () {
             //Integration.getInstance().log("ERRO self.impl.callByName");
             callback((e.javaException instanceof exports.MagicException) && e.javaException || e);
         }
-    };
-    return MagicRequester;
-}());
+    }
+}
 exports.MagicRequester = MagicRequester;
 /*
 public static void addLibraryPath(String pathToAdd) throws Exception{
     final Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");
     usrPathsField.setAccessible(true);
- 
+
     //get array of paths
     final String[] paths = (String[])usrPathsField.get(null);
- 
+
     //check if the path to add is already present
     for(String path : paths) {
         if(path.equals(pathToAdd)) {
             return;
         }
     }
- 
+
     //add the new path
     final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
     newPaths[newPaths.length-1] = pathToAdd;
     usrPathsField.set(null, newPaths);
 }
 */
+//# sourceMappingURL=requester.js.map

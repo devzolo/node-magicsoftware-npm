@@ -48,15 +48,15 @@ export interface IMagicDBMS {
 }
 
 export abstract class MagicDBMS implements IMagicDBMS {
-    
+
     abstract connect(callback: (err?:any) => void);
     abstract query(sql:string, args:Array<any>, callback: (err?:any, rec?:any, size?:number) => any);
 
     public constructor(public magicDatabaseInfo: MagicDatabaseInfo) {
-    } 
+    }
 
     public static getInstance(data:any, databaseName?:string) {
-        
+
         let info:any;
 
         if(databaseName !== undefined && data instanceof MagicIni) {
@@ -69,8 +69,8 @@ export abstract class MagicDBMS implements IMagicDBMS {
         if(info instanceof MagicDatabaseInfo) {
             if(info.dataSourceType === "DBMS") {
                 switch (info.dbmsType) {
-                    case 14: return new DBMSOracle(info);          
-                    case 21: return new DBMSMicrosoftSQLServer(info);         
+                    case 14: return new DBMSOracle(info);
+                    case 21: return new DBMSMicrosoftSQLServer(info);
                     default: return null;
                 }
             }
@@ -82,11 +82,11 @@ export class DBMSOracle extends MagicDBMS  {
     private connection: any;
     private oracledb: any;
     private pool: any;
-    
+
     public constructor(magicDatabaseInfo: MagicDatabaseInfo) {
         super(magicDatabaseInfo);
         this.oracledb = require("oracledb");
-    } 
+    }
 
     public connect(callback: (err?:any) => void) {
         var self = this;
@@ -136,17 +136,17 @@ export class DBMSOracle extends MagicDBMS  {
                 }
             }
         });
-    }    
+    }
 }
 
 export class DBMSMicrosoftSQLServer extends MagicDBMS  {
     private connection: any;
     private tedious: any;
-    
+
     public constructor(magicDatabaseInfo: MagicDatabaseInfo) {
         super(magicDatabaseInfo);
         this.tedious = require("tedious");
-    } 
+    }
 
     private getSqlParameters(source) {
         let result:Array<string> = [];
@@ -161,7 +161,7 @@ export class DBMSMicrosoftSQLServer extends MagicDBMS  {
             }
             mat = pat.exec(source);
         }
-        return result;	  
+        return result;
     }
 
     public connect(callback: (err?:any) => void) {
@@ -175,7 +175,7 @@ export class DBMSMicrosoftSQLServer extends MagicDBMS  {
             }
         }
         this.connection = new this.tedious.Connection(config);
-        this.connection.on('connect', callback); 
+        this.connection.on('connect', callback);
     }
 
     public query(sql:string, args:Array<any>, callback: (err?:any, rec?:any, size?:number) => any) {
@@ -195,9 +195,9 @@ export class DBMSMicrosoftSQLServer extends MagicDBMS  {
                 }
             }
         });
-        
+
         params.forEach((value, index)=>{
-            request.addParameter(params[index], this.tedious.TYPES.VarChar, args[index]);    
+            request.addParameter(params[index], this.tedious.TYPES.VarChar, args[index]);
         });
 
         this.connection.execSql(request);

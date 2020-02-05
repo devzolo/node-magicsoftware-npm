@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
-var eol = process.platform === "win32" ? "\r\n" : "\n";
+let eol = process.platform === "win32" ? "\r\n" : "\n";
 function encode(obj, opt) {
     var children = [], out = "";
     if (typeof opt === "string") {
@@ -62,7 +62,7 @@ function decode(str) {
     lines.forEach(function (line, index, object) {
         if (line != null && line.trim().charAt(line.trim().length - 1) === '+') {
             lines[index] = line.slice(0, -1);
-            for (var counter = 1;; counter++) {
+            for (let counter = 1;; counter++) {
                 if (lines[index + counter] != null && lines[index + counter].trim().charAt(lines[index + counter].trim().length - 1) === '+') {
                     lines[index] = String(lines[index]) + lines[index + counter].slice(0, -1);
                     lines[index + counter] = "";
@@ -83,7 +83,7 @@ function decode(str) {
         if (!match)
             return;
         if (match[1] !== undefined) {
-            section = unsafe(match[1]);
+            const section = unsafe(match[1]);
             p = out[section] = out[section] || {};
             return;
         }
@@ -208,8 +208,8 @@ function unsafe(val, doUnesc) {
     }
     return val;
 }
-var MagicIni = /** @class */ (function () {
-    function MagicIni(iniFilePath) {
+class MagicIni {
+    constructor(iniFilePath) {
         this.iniFilePath = iniFilePath;
         this.ini = decode(fs.readFileSync(iniFilePath, 'latin1'));
     }
@@ -220,9 +220,9 @@ var MagicIni = /** @class */ (function () {
      * @param str str – An alpha value with logical names.
      * @returns The actual values represented by logical names and nested logical names.
      */
-    MagicIni.prototype.translate = function (str) {
+    translate(str) {
         return this.ini.translate(str);
-    };
-    return MagicIni;
-}());
+    }
+}
 exports.MagicIni = MagicIni;
+//# sourceMappingURL=ini.js.map

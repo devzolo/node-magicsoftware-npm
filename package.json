@@ -12,14 +12,15 @@
   },
   "description": "Bridge API to connect with Magic Software APIs.",
   "devDependencies": {
-    "@types/node": "^13.7.0"
+    "@types/node": "^13.7.0",
+    "typescript": "^3.7.5"
   },
   "directories": {
     "test": "test"
   },
   "dist": {
     "shasum": "bb6835f703a6d9c1c8076e5ac3f00734ccbcbdf4",
-    "tarball": "ttps://registry.npmjs.org/magicsoftware/-/magicsoftware-0.0.4.tgz"
+    "tarball": "https://registry.npmjs.org/magicsoftware/-/magicsoftware-0.0.5.tgz"
   },
   "files": [
     "lib/uniRequester.jar",
@@ -43,11 +44,11 @@
     "ini"
   ],
   "license": "ISC",
-  "main": "index.js",
+  "main": "dist",
   "maintainers": [
     {
-      "name": "raphael-interinfo",
-      "email": "raphael@interinfo.com.br"
+      "name": "devzolo",
+      "email": "zolotorevsky@gmail.com"
     }
   ],
   "name": "magicsoftware",

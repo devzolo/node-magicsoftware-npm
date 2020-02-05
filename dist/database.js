@@ -1,18 +1,8 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var ini_1 = require("ini");
-var MagicDatabaseInfo = /** @class */ (function () {
-    function MagicDatabaseInfo(config, key) {
+const ini_1 = require("./ini");
+class MagicDatabaseInfo {
+    constructor(config, key) {
         this.config = config;
         this.key = key;
         this.raw = (config.ini.MAGIC_DATABASES[key] || "").split(",");
@@ -35,21 +25,20 @@ var MagicDatabaseInfo = /** @class */ (function () {
         this.nop = this.get(16);
         this.connectString = this.get(17);
     }
-    MagicDatabaseInfo.prototype.get = function (index) {
+    get(index) {
         return this.config.translate(this.raw[index] || "").trim();
-    };
-    MagicDatabaseInfo.prototype.getInt = function (index) {
+    }
+    getInt(index) {
         return Number(this.get(index));
-    };
-    return MagicDatabaseInfo;
-}());
+    }
+}
 exports.MagicDatabaseInfo = MagicDatabaseInfo;
-var MagicDBMS = /** @class */ (function () {
-    function MagicDBMS(magicDatabaseInfo) {
+class MagicDBMS {
+    constructor(magicDatabaseInfo) {
         this.magicDatabaseInfo = magicDatabaseInfo;
     }
-    MagicDBMS.getInstance = function (data, databaseName) {
-        var info;
+    static getInstance(data, databaseName) {
+        let info;
         if (databaseName !== undefined && data instanceof ini_1.MagicIni) {
             info = new MagicDatabaseInfo(data, databaseName);
         }
@@ -65,20 +54,17 @@ var MagicDBMS = /** @class */ (function () {
                 }
             }
         }
-    };
-    return MagicDBMS;
-}());
-exports.MagicDBMS = MagicDBMS;
-var DBMSOracle = /** @class */ (function (_super) {
-    __extends(DBMSOracle, _super);
-    function DBMSOracle(magicDatabaseInfo) {
-        var _this = _super.call(this, magicDatabaseInfo) || this;
-        _this.oracledb = require("oracledb");
-        return _this;
     }
-    DBMSOracle.prototype.connect = function (callback) {
+}
+exports.MagicDBMS = MagicDBMS;
+class DBMSOracle extends MagicDBMS {
+    constructor(magicDatabaseInfo) {
+        super(magicDatabaseInfo);
+        this.oracledb = require("oracledb");
+    }
+    connect(callback) {
         var self = this;
-        var dbConfig = {
+        let dbConfig = {
             user: this.magicDatabaseInfo.userName,
             password: this.magicDatabaseInfo.password,
             connectString: this.magicDatabaseInfo.connectString || this.magicDatabaseInfo.server,
@@ -101,8 +87,8 @@ var DBMSOracle = /** @class */ (function (_super) {
                 return callback(err);
             });
         });
-    };
-    DBMSOracle.prototype.query = function (sql, args, callback) {
+    }
+    query(sql, args, callback) {
         if (!this.connection) {
             callback(new Error('Not connected'));
             return;
@@ -120,20 +106,17 @@ var DBMSOracle = /** @class */ (function (_super) {
                 }
             }
         });
-    };
-    return DBMSOracle;
-}(MagicDBMS));
-exports.DBMSOracle = DBMSOracle;
-var DBMSMicrosoftSQLServer = /** @class */ (function (_super) {
-    __extends(DBMSMicrosoftSQLServer, _super);
-    function DBMSMicrosoftSQLServer(magicDatabaseInfo) {
-        var _this = _super.call(this, magicDatabaseInfo) || this;
-        _this.tedious = require("tedious");
-        return _this;
     }
-    DBMSMicrosoftSQLServer.prototype.getSqlParameters = function (source) {
-        var result = [];
-        var pat = /@.+?(\W|$)/g;
+}
+exports.DBMSOracle = DBMSOracle;
+class DBMSMicrosoftSQLServer extends MagicDBMS {
+    constructor(magicDatabaseInfo) {
+        super(magicDatabaseInfo);
+        this.tedious = require("tedious");
+    }
+    getSqlParameters(source) {
+        let result = [];
+        let pat = /@.+?(\W|$)/g;
         var mat = pat.exec(source);
         while (mat != null) {
             var param = mat[0];
@@ -144,9 +127,9 @@ var DBMSMicrosoftSQLServer = /** @class */ (function (_super) {
             mat = pat.exec(source);
         }
         return result;
-    };
-    DBMSMicrosoftSQLServer.prototype.connect = function (callback) {
-        var config = {
+    }
+    connect(callback) {
+        let config = {
             userName: this.magicDatabaseInfo.userName,
             password: this.magicDatabaseInfo.password,
             server: this.magicDatabaseInfo.server,
@@ -157,34 +140,30 @@ var DBMSMicrosoftSQLServer = /** @class */ (function (_super) {
         };
         this.connection = new this.tedious.Connection(config);
         this.connection.on('connect', callback);
-    };
-    DBMSMicrosoftSQLServer.prototype.query = function (sql, args, callback) {
-        var _this = this;
-        var params = this.getSqlParameters(sql);
-        var request = new this.tedious.Request(sql, function (err, rowCount, rows) {
+    }
+    query(sql, args, callback) {
+        let params = this.getSqlParameters(sql);
+        let request = new this.tedious.Request(sql, function (err, rowCount, rows) {
             if (err) {
                 callback(err);
             }
             else {
-                var data = void 0;
-                var _loop_1 = function () {
+                let data;
+                for (var rowIndex = 0; rowIndex < rowCount; rowIndex++) {
                     data = rows[rowIndex];
-                    var obj = {};
+                    let obj = {};
                     data.forEach(function (column) {
                         obj[column.metadata.colName] = column.value;
                     });
                     callback(null, obj, rowCount);
-                };
-                for (var rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                    _loop_1();
                 }
             }
         });
-        params.forEach(function (value, index) {
-            request.addParameter(params[index], _this.tedious.TYPES.VarChar, args[index]);
+        params.forEach((value, index) => {
+            request.addParameter(params[index], this.tedious.TYPES.VarChar, args[index]);
         });
         this.connection.execSql(request);
-    };
-    return DBMSMicrosoftSQLServer;
-}(MagicDBMS));
+    }
+}
 exports.DBMSMicrosoftSQLServer = DBMSMicrosoftSQLServer;
+//# sourceMappingURL=database.js.map
