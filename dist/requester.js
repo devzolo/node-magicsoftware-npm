@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var java = require('java');
 var path = require('path');
 //java.library.path = __dirname;
-java.classpath.push(path.resolve(__dirname, './lib/uniRequester.jar'));
-java.classpath.push(path.resolve(__dirname, './lib/Magic.jar'));
+java.classpath.push(path.resolve(__dirname, '..', 'lib/uniRequester.jar'));
+java.classpath.push(path.resolve(__dirname, '..', 'lib/Magic.jar'));
 let javaLangSystem = java.import('java.lang.System');
 let javaLangClassLoader = java.import('java.lang.ClassLoader');
 let MGRequester = java.import('br.com.vitalbyte.magic.MagicRequester');
@@ -25,9 +25,6 @@ function setLibraryPath(path) {
     var sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
     sysPathsField.setAccessibleSync(true);
     sysPathsField.setSync(null, null);
-}
-function isOSWin64() {
-    return process.arch === 'x64' || (process.env.hasOwnProperty('PROCESSOR_ARCHITEW6432') && process.env.PROCESSOR_ARCHITEW6432 == 'AMD64');
 }
 function initLibraryPath() {
     setLibraryPath(path.join(__dirname, '..', 'bin', process.platform, process.arch));

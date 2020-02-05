@@ -6,8 +6,8 @@ var path = require('path');
 
 //java.library.path = __dirname;
 
-java.classpath.push(path.resolve(__dirname, './lib/uniRequester.jar'));
-java.classpath.push(path.resolve(__dirname, './lib/Magic.jar'));
+java.classpath.push(path.resolve(__dirname, '..', 'lib/uniRequester.jar'));
+java.classpath.push(path.resolve(__dirname, '..', 'lib/Magic.jar'));
 
 let javaLangSystem = java.import('java.lang.System');
 let javaLangClassLoader = java.import('java.lang.ClassLoader');
