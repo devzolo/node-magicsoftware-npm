@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /*/// <reference path="./node_modules/@types/node/index.d.ts" />*/
 
 import java from 'java';
@@ -19,58 +20,57 @@ export const MagicTime = java.import('br.com.vitalbyte.magic.types.MagicTime');
 export const MagicBlob = java.import('br.com.vitalbyte.magic.types.MagicBlob');
 export const MagicVariant = java.import('br.com.vitalbyte.magic.types.MagicVariant');
 
-function setLibraryPath(path: string) {
-    javaLangSystem.setPropertySync("java.library.path", path);
+function setLibraryPath(path: string): void {
+  javaLangSystem.setPropertySync('java.library.path', path);
 
-    //set sys_paths to null
-    const sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
-    sysPathsField.setAccessibleSync(true);
-    sysPathsField.setSync(null, null);
+  //set sys_paths to null
+  const sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync('sys_paths');
+  sysPathsField.setAccessibleSync(true);
+  sysPathsField.setSync(null, null);
 }
 
-function initLibraryPath() {
-	setLibraryPath(path.join(__dirname, '..', 'bin', process.platform, process.arch));
+function initLibraryPath(): void {
+  setLibraryPath(path.join(__dirname, '..', 'bin', process.platform, process.arch));
 }
 
 initLibraryPath();
 
-
 export class MagicRequester {
+  public impl: any;
 
-	public impl: any;
+  constructor(public app: string, public server: string) {
+    this.app = app;
+    this.server = server;
+    this.impl = new MGRequester(app, server);
+  }
 
-	constructor(public app: string, public server: string) {
-		this.app = app;
-		this.server = server;
-		this.impl = new MGRequester(app, server);
-	}
+  /**
+   * The callByName method lets you call a program in a remote engine.
+   * @method callByName
+   * @param publicName publicName – The public name of the program to be executed.
+   * @param params params – Parameters.
+   * @param callback callback – Result callback.
+   * @returns The actual values represented by logical names and nested logical names.
+   */
+  callByName(publicName: string, params: Array<any>, callback: (err: any, result?: any) => any): any {
+    const args = params;
 
-	/**
-	 * The callByName method lets you call a program in a remote engine.
-	 * @method callByName
-	 * @param publicName publicName – The public name of the program to be executed.
-	 * @param params params – Parameters.
-	 * @param callback callback – Result callback.
-	 * @returns The actual values represented by logical names and nested logical names.
-	 */
-	callByName(publicName: string, params: Array<any>, callback: (err:any, result?:any) => any) {
-		var args = params;
+    args.unshift(publicName);
 
-		args.unshift(publicName);
+    try {
+      const prog = args.shift();
+      const result = MGRequester.staticCallByNameSync(
+        this.impl,
+        prog,
+        java.newArray('br.com.vitalbyte.magic.types.MagicVariable', args),
+      );
 
-		try {
-			var prog = args.shift();
-			var result = MGRequester.staticCallByNameSync(this.impl, prog,  java.newArray("br.com.vitalbyte.magic.types.MagicVariable", args));
-
-			callback(null, result);
-
-		}
-		catch(e) {
-			//Integration.getInstance().log("ERRO self.impl.callByName");
-			callback((e.javaException instanceof MagicException) && e.javaException || e);
-		}
-	}
-
+      callback(null, result);
+    } catch (e) {
+      //Integration.getInstance().log("ERRO self.impl.callByName");
+      callback((e.javaException instanceof MagicException && e.javaException) || e);
+    }
+  }
 }
 
 /*

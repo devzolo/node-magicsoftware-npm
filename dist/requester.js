@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /*/// <reference path="./node_modules/@types/node/index.d.ts" />*/
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -21,9 +22,9 @@ exports.MagicTime = java_1.default.import('br.com.vitalbyte.magic.types.MagicTim
 exports.MagicBlob = java_1.default.import('br.com.vitalbyte.magic.types.MagicBlob');
 exports.MagicVariant = java_1.default.import('br.com.vitalbyte.magic.types.MagicVariant');
 function setLibraryPath(path) {
-    javaLangSystem.setPropertySync("java.library.path", path);
+    javaLangSystem.setPropertySync('java.library.path', path);
     //set sys_paths to null
-    const sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync("sys_paths");
+    const sysPathsField = javaLangClassLoader.class.getDeclaredFieldSync('sys_paths');
     sysPathsField.setAccessibleSync(true);
     sysPathsField.setSync(null, null);
 }
@@ -48,16 +49,16 @@ class MagicRequester {
      * @returns The actual values represented by logical names and nested logical names.
      */
     callByName(publicName, params, callback) {
-        var args = params;
+        const args = params;
         args.unshift(publicName);
         try {
-            var prog = args.shift();
-            var result = MGRequester.staticCallByNameSync(this.impl, prog, java_1.default.newArray("br.com.vitalbyte.magic.types.MagicVariable", args));
+            const prog = args.shift();
+            const result = MGRequester.staticCallByNameSync(this.impl, prog, java_1.default.newArray('br.com.vitalbyte.magic.types.MagicVariable', args));
             callback(null, result);
         }
         catch (e) {
             //Integration.getInstance().log("ERRO self.impl.callByName");
-            callback((e.javaException instanceof exports.MagicException) && e.javaException || e);
+            callback((e.javaException instanceof exports.MagicException && e.javaException) || e);
         }
     }
 }

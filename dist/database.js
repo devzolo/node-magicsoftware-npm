@@ -1,11 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 const ini_1 = require("./ini");
 class MagicDatabaseInfo {
     constructor(config, key) {
         this.config = config;
         this.key = key;
-        this.raw = (config.ini.MAGIC_DATABASES[key] || "").split(",");
+        this.raw = (config.ini.MAGIC_DATABASES[key] || '').split(',');
         this.dataSourceType = this.get(0);
         this.dbmsType = this.getInt(1);
         this.database = this.get(2);
@@ -26,7 +30,7 @@ class MagicDatabaseInfo {
         this.connectString = this.get(17);
     }
     get(index) {
-        return this.config.translate(this.raw[index] || "").trim();
+        return this.config.translate(this.raw[index] || '').trim();
     }
     getInt(index) {
         return Number(this.get(index));
@@ -46,11 +50,14 @@ class MagicDBMS {
             info = data;
         }
         if (info instanceof MagicDatabaseInfo) {
-            if (info.dataSourceType === "DBMS") {
+            if (info.dataSourceType === 'DBMS') {
                 switch (info.dbmsType) {
-                    case 14: return new DBMSOracle(info);
-                    case 21: return new DBMSMicrosoftSQLServer(info);
-                    default: return null;
+                    case 14:
+                        return new DBMSOracle(info);
+                    case 21:
+                        return new DBMSMicrosoftSQLServer(info);
+                    default:
+                        return null;
                 }
             }
         }
@@ -60,15 +67,14 @@ exports.MagicDBMS = MagicDBMS;
 class DBMSOracle extends MagicDBMS {
     constructor(magicDatabaseInfo) {
         super(magicDatabaseInfo);
-        this.oracledb = require("oracledb");
+        this.oracledb = require('oracledb');
     }
     connect(callback) {
-        var self = this;
-        let dbConfig = {
+        const dbConfig = {
             user: this.magicDatabaseInfo.userName,
             password: this.magicDatabaseInfo.password,
             connectString: this.magicDatabaseInfo.connectString || this.magicDatabaseInfo.server,
-            externalAuth: false
+            externalAuth: false,
         };
         this.oracledb.createPool({
             user: dbConfig.user,
@@ -76,14 +82,14 @@ class DBMSOracle extends MagicDBMS {
             connectString: dbConfig.connectString,
             poolMax: 1,
             poolMin: 1,
-            poolIncrement: 0
-        }, function (err, pool) {
-            self.pool = pool;
+            poolIncrement: 0,
+        }, (err, pool) => {
+            this.pool = pool;
             if (err) {
                 return callback(err);
             }
-            self.pool.getConnection(function (err, connection) {
-                self.connection = connection;
+            this.pool.getConnection((err, connection) => {
+                this.connection = connection;
                 return callback(err);
             });
         });
@@ -100,7 +106,7 @@ class DBMSOracle extends MagicDBMS {
             }
             if (callback) {
                 if (result.rows.length > 0) {
-                    for (var i = 0; i < result.rows.length; i++) {
+                    for (let i = 0; i < result.rows.length; i++) {
                         callback(null, result.rows[i], result.rows.length);
                     }
                 }
@@ -112,15 +118,15 @@ exports.DBMSOracle = DBMSOracle;
 class DBMSMicrosoftSQLServer extends MagicDBMS {
     constructor(magicDatabaseInfo) {
         super(magicDatabaseInfo);
-        this.tedious = require("tedious");
+        this.tedious = require('tedious');
     }
     getSqlParameters(source) {
-        let result = [];
-        let pat = /@.+?(\W|$)/g;
-        var mat = pat.exec(source);
+        const result = [];
+        const pat = /@.+?(\W|$)/g;
+        let mat = pat.exec(source);
         while (mat != null) {
-            var param = mat[0];
-            var paramName = param.substring(1, mat[0].length);
+            const param = mat[0];
+            const paramName = param.substring(1, mat[0].length);
             if (!(result.indexOf(paramName) > -1)) {
                 result.push(paramName);
             }
@@ -129,29 +135,29 @@ class DBMSMicrosoftSQLServer extends MagicDBMS {
         return result;
     }
     connect(callback) {
-        let config = {
+        const config = {
             userName: this.magicDatabaseInfo.userName,
             password: this.magicDatabaseInfo.password,
             server: this.magicDatabaseInfo.server,
             options: {
                 rowCollectionOnRequestCompletion: true,
-                database: this.magicDatabaseInfo.database
-            }
+                database: this.magicDatabaseInfo.database,
+            },
         };
         this.connection = new this.tedious.Connection(config);
         this.connection.on('connect', callback);
     }
     query(sql, args, callback) {
-        let params = this.getSqlParameters(sql);
-        let request = new this.tedious.Request(sql, function (err, rowCount, rows) {
+        const params = this.getSqlParameters(sql);
+        const request = new this.tedious.Request(sql, function (err, rowCount, rows) {
             if (err) {
                 callback(err);
             }
             else {
                 let data;
-                for (var rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
                     data = rows[rowIndex];
-                    let obj = {};
+                    const obj = {};
                     data.forEach(function (column) {
                         obj[column.metadata.colName] = column.value;
                     });
