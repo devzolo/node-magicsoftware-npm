@@ -1,18 +1,19 @@
 {
   "author": {
     "name": "Raphael Zolotorevsky da Motta",
-    "email": "raphael@interinfo.com.br",
-    "url": "http://interinfo.com.br/"
+    "email": "zolotorevsky@gmail.com",
+    "url": "http://devzolo.com/"
   },
   "bugs": {
-    "url": "https://github.com/raphael-interinfo/node-magicsoftware/issues"
+    "url": "https://github.com/devzolo/node-magicsoftware/issues"
   },
   "dependencies": {
-    "@types/node": "^8.0.31",
-    "java": "^0.8.0"
+    "java": "^0.12.1"
   },
   "description": "Bridge API to connect with Magic Software APIs.",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^13.7.0"
+  },
   "directories": {
     "test": "test"
   },
@@ -35,7 +36,7 @@
     "database.js"
   ],
   "gitHead": "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6",
-  "homepage": "https://github.com/raphael-interinfo/node-magicsoftware#readme",
+  "homepage": "https://github.com/devzolo/node-magicsoftware#readme",
   "keywords": [
     "magicsoftware",
     "java",
@@ -54,7 +55,7 @@
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git://github.com/raphael-interinfo/node-magicsoftware.git"
+    "url": "git://github.com/devzolo/node-magicsoftware.git"
   },
   "scripts": {
     "test": "tap test/*.js"
