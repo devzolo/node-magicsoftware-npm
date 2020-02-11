@@ -70,7 +70,7 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.test
+#.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -102,3 +102,10 @@ typings/
 
 # TernJS port file
 .tern-port
+
+# Magic XPA generated files
+*.ecf
+*.opt
+*.sln
+*.suo
+*.xpaproj
