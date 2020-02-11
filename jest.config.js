@@ -11,4 +11,6 @@ module.exports = {
     },
     NODE_ENV: 'test',
   },
+  collectCoverage: true,
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
 };

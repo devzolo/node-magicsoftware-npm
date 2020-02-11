@@ -8,21 +8,23 @@
     "url": "https://github.com/devzolo/node-magicsoftware/issues"
   },
   "dependencies": {
-    "java": "^0.12.1"
+    "edge-js": "^13.0.1",
+    "sql-database": "^0.0.2"
   },
   "description": "Bridge API to connect with Magic Software APIs.",
   "devDependencies": {
-    "@types/java": "^0.9.0",
     "@types/jest": "^25.1.2",
-    "@types/node": "^13.7.0",
+    "@types/node": "^13.7.1",
     "@typescript-eslint/eslint-plugin": "^2.19.0",
     "@typescript-eslint/parser": "^2.19.0",
+    "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "jest": "^25.1.0",
     "prettier": "^1.19.1",
     "ts-jest": "^25.2.0",
+    "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "directories": {
@@ -33,10 +35,10 @@
     "tarball": "https://registry.npmjs.org/magicsoftware/-/magicsoftware-0.0.5.tgz"
   },
   "files": [
-    "lib/uniRequester.jar",
-    "lib/Magic.jar",
     "bin/win32/x32/MGrqgnrc.dll",
+    "bin/win32/x32/MgRequester.dll",
     "bin/win32/x64/MGrqgnrc.dll",
+    "bin/win32/x64/MgRequester.dll",
     "src/index.ts",
     "dist/index.js",
     "src/requester.ts",
@@ -50,7 +52,7 @@
   "homepage": "https://github.com/devzolo/node-magicsoftware#readme",
   "keywords": [
     "magicsoftware",
-    "java",
+    "edge-js",
     "ini"
   ],
   "license": "ISC",
@@ -70,7 +72,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "ts-node src/__tests__/index"
+    "test": "jest --coverage"
   },
   "version": "0.0.11"
 }

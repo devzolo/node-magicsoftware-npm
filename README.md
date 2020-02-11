@@ -6,30 +6,30 @@ npm install magicsoftware
 
 ## Javascript Requester Example
 
-```javascript
+```js
 
 var magic = require("magicsoftware/requester");
 
 var requester = new magic.MagicRequester("Teste", "localhost/5115");
 var v_example = new magic.MagicAlpha("TESTE");
- 
+
 requester.callByName("TEST", [v_example], function(err, result) {
     if(err) {
-        console.log(err);   
+        console.log(err);
     }
     else {
         console.log("v_example = " + v_example);
         console.log("result =  " + result);
     }
-	
+
 ```
-	
+
 ## TypeScript Requester Example
-	
-```javascript
+
+```ts
 
 import {
-    MagicRequester, 
+    MagicRequester,
     MagicException,
     MagicVariable,
     MagicAlpha,
@@ -46,7 +46,7 @@ var v_example:MagicAlpha = new MagicAlpha("TESTE");
 
 requester.callByName("TEST", [v_example], function(err, result) {
     if(err) {
-        console.log(err);   
+        console.log(err);
     }
     else {
         console.log("v_example = " + v_example);
