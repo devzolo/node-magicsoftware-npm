@@ -4,8 +4,8 @@
 import java from 'java';
 import path from 'path';
 
-java.classpath.push(path.resolve(__dirname, '..', 'lib/uniRequester.jar'));
-java.classpath.push(path.resolve(__dirname, '..', 'lib/Magic.jar'));
+java.classpath.push(path.resolve(path.join(__dirname, '..', 'lib', 'uniRequester.jar')));
+java.classpath.push(path.resolve(path.join(__dirname, '..', 'lib', 'Magic.jar')));
 
 const javaLangSystem = java.import('java.lang.System');
 const javaLangClassLoader = java.import('java.lang.ClassLoader');
@@ -30,7 +30,7 @@ function setLibraryPath(path: string): void {
 }
 
 function initLibraryPath(): void {
-  setLibraryPath(path.join(__dirname, '..', 'bin', process.platform, process.arch));
+  setLibraryPath(path.resolve(path.join(__dirname, '..', 'bin', process.platform, process.arch)));
 }
 
 initLibraryPath();
