@@ -4,7 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./ini"));
-//export * from './database';
+__export(require("./database"));
 __export(require("./requester"));
 __export(require("./server"));
 __export(require("./tools"));
